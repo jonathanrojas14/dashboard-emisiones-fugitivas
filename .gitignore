@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Excel files (archivos de datos grandes)
+*.xlsx
+*.xls
+*.xlsm
+
+# KML/KMZ files
+*.kml
+*.kmz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*_backup.py
+app_backup.py
+output.txt
+inspect_excel.py
+CODIGO PYTHON.txt
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Folders con datos
+VAOH/
+VAOR/
+VPI/
+VRCM/
+VRCN/
+VRO/
+
+# Temporary files
+*.tmp
+*.log

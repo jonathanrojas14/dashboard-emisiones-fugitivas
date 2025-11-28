@@ -1,0 +1,9 @@
+streamlit>=1.30
+pandas>=2.0
+numpy
+folium>=0.14
+streamlit-folium>=0.15
+plotly>=5.18
+branca
+openpyxl
+python-dateutil
