@@ -266,7 +266,7 @@ st.markdown(f"""
 st.markdown("""
 <div style='text-align: center; padding: 1rem 0 2rem 0;'>
     <h1 style='margin: 0; padding: 0;'>
-        🛢️ Monitoreo Ambiental de Emisiones Fugitivas en Tanques
+        🛢️ Interpretación de Datos de Monitoreo Top-Down: Módulo de Análisis Exploratorio
     </h1>
     <p style='color: #7F8C8D; font-size: 1.1rem; margin-top: 0.5rem;'>
         Sistema de Análisis y Visualización de Concentraciones de Metano
