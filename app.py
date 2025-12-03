@@ -368,6 +368,8 @@ if data is None or len(data) == 0:
 
 # Clean column names
 data.columns = data.columns.str.strip()
+if wind_data is not None and hasattr(wind_data, 'columns'):
+    wind_data.columns = wind_data.columns.str.strip()
 
 # Auto-detect columns
 def auto_detect_columns(df):
