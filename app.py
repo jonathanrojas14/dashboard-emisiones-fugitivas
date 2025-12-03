@@ -825,7 +825,7 @@ with col2:
     </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🗺️ Ver ubicación en mapa", key="btn_max", use_container_width=True):
+    if st.button("🗺️ Ver ubicación en mapa", key="btn_max", width='stretch'):
         st.session_state['goto_max'] = True
         st.rerun()
         
@@ -865,7 +865,7 @@ with col4:
     </div>
     """, unsafe_allow_html=True)
     
-    if st.button("🗺️ Ver ubicación en mapa", key="btn_min", use_container_width=True):
+    if st.button("🗺️ Ver ubicación en mapa", key="btn_min", width='stretch'):
         st.session_state['goto_min'] = True
         st.rerun()
 
@@ -1243,13 +1243,13 @@ with tab2:
             )
         )
         
-        st.plotly_chart(fig_emission, use_container_width=True)
+        st.plotly_chart(fig_emission, width='stretch')
         
         # Tabla de estadísticas detalladas
         st.markdown("#### 📋 Estadísticas Detalladas por Instalación")
         emission_stats_display = emission_stats.sort_values('Total', ascending=False).copy()
         emission_stats_display.columns = [f'{col} ({emission_rate_units})' if col != 'Nº Mediciones' else col for col in emission_stats_display.columns]
-        st.dataframe(emission_stats_display, use_container_width=True, height=400)
+        st.dataframe(emission_stats_display, width='stretch', height=400)
         
         # Métricas clave
         st.markdown("---")
@@ -1418,7 +1418,7 @@ with tab2:
                     hovermode='closest'
                 )
                 
-                st.plotly_chart(fig_correlation, use_container_width=True)
+                st.plotly_chart(fig_correlation, width='stretch')
                 
                 # ═══════════════════════════════════════════════════════════════
                 # CLASIFICACIÓN POR CUADRANTES CON UMBRALES CONFIGURABLES
@@ -1545,7 +1545,7 @@ with tab2:
                         }).round(2).reset_index()
                         criticas_grouped.columns = ['Facility Name', f'Rate Promedio ({emission_rate_units})', f'CH₄ Promedio ({ch4_units})']
                         criticas_grouped = criticas_grouped.sort_values(f'Rate Promedio ({emission_rate_units})', ascending=False)
-                        st.dataframe(criticas_grouped, use_container_width=True, hide_index=True)
+                        st.dataframe(criticas_grouped, width='stretch', hide_index=True)
                     else:
                         st.info("✅ No hay instalaciones en esta categoría")
                 
@@ -1559,7 +1559,7 @@ with tab2:
                         }).round(2).reset_index()
                         anomalias_grouped.columns = ['Facility Name', f'Rate Promedio ({emission_rate_units})', f'CH₄ Promedio ({ch4_units})']
                         anomalias_grouped = anomalias_grouped.sort_values(f'Rate Promedio ({emission_rate_units})', ascending=False)
-                        st.dataframe(anomalias_grouped, use_container_width=True, hide_index=True)
+                        st.dataframe(anomalias_grouped, width='stretch', hide_index=True)
                     else:
                         st.info("✅ No hay instalaciones en esta categoría")
             else:
@@ -1681,7 +1681,7 @@ with tab2:
                         hovermode='x unified'
                     )
                     
-                    st.plotly_chart(fig_timeseries, use_container_width=True)
+                    st.plotly_chart(fig_timeseries, width='stretch')
                     
                     # Análisis de patrones
                     st.markdown("#### 🔍 Análisis de Patrones Detectados")
@@ -1838,7 +1838,7 @@ with tab2:
                     )
                 )
                 
-                st.plotly_chart(fig_accum, use_container_width=True)
+                st.plotly_chart(fig_accum, width='stretch')
                 
                 # Tabla resumen para OGMP
                 st.markdown("#### 📋 Tabla Resumen - Inventario de Emisiones")
@@ -1850,7 +1850,7 @@ with tab2:
                     'Nº Mediciones',
                     '% del Total'
                 ]
-                st.dataframe(accumulated_display, use_container_width=True, height=400)
+                st.dataframe(accumulated_display, width='stretch', height=400)
                 
                 # Tarjetas clave del inventario
                 st.markdown("---")
@@ -1988,7 +1988,7 @@ with tab2:
                         )
                     )
                     
-                    st.plotly_chart(fig_monthly, use_container_width=True)
+                    st.plotly_chart(fig_monthly, width='stretch')
                     
                     # Tabla pivot de emisiones mensuales
                     st.markdown("#### 📅 Tabla Mensual de Emisiones por Instalación")
@@ -2003,7 +2003,7 @@ with tab2:
                     pivot_monthly['TOTAL'] = pivot_monthly.sum(axis=1)
                     pivot_monthly = pivot_monthly.sort_values('TOTAL', ascending=False)
                     
-                    st.dataframe(pivot_monthly, use_container_width=True, height=400)
+                    st.dataframe(pivot_monthly, width='stretch', height=400)
                     
                 else:
                     st.warning("⚠️ No se encontraron datos temporales para acumulación mensual")
@@ -2081,9 +2081,9 @@ with tab2:
         facility_stats_filtered = facility_stats[facility_stats['Nº Mediciones'] >= min_measurements]
         facility_stats_filtered = facility_stats_filtered.sort_values(sort_by, ascending=False).head(top_n)
         
-        # Filtrar datos originales
+        # Filtrar datos originales - usar .copy() para evitar SettingWithCopyWarning
         facilities_to_show = facility_stats_filtered.index.tolist()
-        df_plot_filtered = df_plot[df_plot[facility_col].isin(facilities_to_show)]
+        df_plot_filtered = df_plot[df_plot[facility_col].isin(facilities_to_show)].copy()
         
         # Crear orden categórico basado en el ordenamiento
         facility_order = facility_stats_filtered.index.tolist()
@@ -2130,7 +2130,7 @@ with tab2:
                 margin=dict(b=150)
             )
             
-            st.plotly_chart(fig_box, use_container_width=True)
+            st.plotly_chart(fig_box, width='stretch')
         
         with viz_tab2:
             st.markdown("#### Scatter Plot por Instalación")
@@ -2179,7 +2179,7 @@ with tab2:
                 showlegend=False
             )
             
-            st.plotly_chart(fig_scatter, use_container_width=True)
+            st.plotly_chart(fig_scatter, width='stretch')
         
         with viz_tab3:
             st.markdown("#### Barras con Error Bars")
@@ -2218,14 +2218,14 @@ with tab2:
                 showlegend=False
             )
             
-            st.plotly_chart(fig_bar, use_container_width=True)
+            st.plotly_chart(fig_bar, width='stretch')
         
         # Mostrar estadísticas
         st.markdown("---")
         st.subheader("📊 Estadísticas por Instalación")
         facility_stats_display = facility_stats_filtered.copy()
         facility_stats_display.columns = [f'{col} ({ch4_units})' if col != 'Nº Mediciones' else col for col in facility_stats_display.columns]
-        st.dataframe(facility_stats_display, use_container_width=True)
+        st.dataframe(facility_stats_display, width='stretch')
         
     else:
         st.warning("⚠️ No se encontró la columna 'Facility Name' en los datos")
@@ -2235,7 +2235,7 @@ with tab2:
                             color=ch4_col,
                             color_continuous_scale=[[0, ENERGY_COLORS['success']], [0.5, ENERGY_COLORS['warning']], [1, ENERGY_COLORS['danger']]])
         fig_simple.update_layout(height=500, template='plotly_white')
-        st.plotly_chart(fig_simple, use_container_width=True)
+        st.plotly_chart(fig_simple, width='stretch')
 
 # ══════════════════════════════════════════════════════════════════════
 # 6.3 TAB 3: ANÁLISIS DE VELOCIDAD DE VIENTO
@@ -2291,7 +2291,7 @@ with tab3:
                     showlegend=False
                 )
                 
-                st.plotly_chart(fig_hist, use_container_width=True)
+                st.plotly_chart(fig_hist, width='stretch')
             
             with col2:
                 # Box plot de velocidad
@@ -2311,7 +2311,7 @@ with tab3:
                     showlegend=False
                 )
                 
-                st.plotly_chart(fig_box, use_container_width=True)
+                st.plotly_chart(fig_box, width='stretch')
             
             # Gráfica de serie temporal si hay índice temporal
             if 'DateTime' in wind_source_df.columns or 'Date' in wind_source_df.columns or 'Time' in wind_source_df.columns:
@@ -2340,7 +2340,7 @@ with tab3:
                             showlegend=False
                         )
                         
-                        st.plotly_chart(fig_time, use_container_width=True)
+                        st.plotly_chart(fig_time, width='stretch')
             
             # Métricas estadísticas
             st.markdown("### 📊 Estadísticas de Velocidad de Viento")
@@ -2376,17 +2376,17 @@ with tab4:
                                color_discrete_sequence=[ENERGY_COLORS['primary']],
                                labels={ch4_col: f"Concentración CH₄ ({ch4_units})"})
         fig_hist.update_layout(height=400, showlegend=False, template='plotly_white')
-        st.plotly_chart(fig_hist, use_container_width=True)
+        st.plotly_chart(fig_hist, width='stretch')
     
     with col2:
         st.markdown("### 📊 Box Plot - Distribución")
         fig_box = px.box(df, y=ch4_col, color_discrete_sequence=[ENERGY_COLORS['secondary']],
                         labels={ch4_col: f"Concentración CH₄ ({ch4_units})"})
         fig_box.update_layout(height=400, showlegend=False, template='plotly_white')
-        st.plotly_chart(fig_box, use_container_width=True)
+        st.plotly_chart(fig_box, width='stretch')
     
     st.markdown("### 📋 Tabla de Datos Completos")
-    st.dataframe(df, use_container_width=True, height=400)
+    st.dataframe(df, width='stretch', height=400)
     
     # Botón de descarga
     csv = df.to_csv(index=False).encode('utf-8')
@@ -2437,12 +2437,12 @@ def layout_comparacion_ecopetrol_carleton():
     with col1:
         st.markdown("#### 📊 Comparación de Tasas de Emisión")
         st.caption("*Gráfico comparativo Ecopetrol vs Carleton por instalación*")
-        st.image("https://via.placeholder.com/400x300/1ABC9C/FFFFFF?text=Gr%C3%A1fico+en+Desarrollo", use_container_width=True)
+        st.image("https://via.placeholder.com/400x300/1ABC9C/FFFFFF?text=Gr%C3%A1fico+en+Desarrollo", width='stretch')
     
     with col2:
         st.markdown("#### 📈 Análisis de Correlación")
         st.caption("*Scatter plot con línea de tendencia y R²*")
-        st.image("https://via.placeholder.com/400x300/3498DB/FFFFFF?text=An%C3%A1lisis+Pendiente", use_container_width=True)
+        st.image("https://via.placeholder.com/400x300/3498DB/FFFFFF?text=An%C3%A1lisis+Pendiente", width='stretch')
 
 # ══════════════════════════════════════════════════════════════════════
 # FIN DEL DASHBOARD
