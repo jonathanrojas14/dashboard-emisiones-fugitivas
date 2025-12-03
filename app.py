@@ -380,9 +380,19 @@ def auto_detect_columns(df):
     """
     cols_lower = {str(c).lower().strip(): c for c in df.columns}
     
-    def find(keys):
+    def find(keys, exclude_patterns=None):
+        """
+        Busca columnas que coincidan con las claves, excluyendo patrones no deseados
+        """
+        if exclude_patterns is None:
+            exclude_patterns = []
+        
         for k in keys:
             for c_low, c in cols_lower.items():
+                # Verificar si debe ser excluido
+                if any(excl in c_low for excl in exclude_patterns):
+                    continue
+                # Verificar coincidencia
                 if k in c_low:
                     return c
         return None
@@ -390,7 +400,7 @@ def auto_detect_columns(df):
     detected = {
         'lat': find(["latitude", "lat", "y"]),
         'lon': find(["longitude", "lon", "lng", "long", "x"]),
-        'ch4': find(["max concentration", "max_concentration", "concentration", "ch4", "methane", "metano", "ch_4", "concentracion", "ppm-m", "ppm"]),
+        'ch4': find(["max concentration", "max_concentration", "concentration", "ch4", "methane", "metano", "ch_4", "concentracion", "ppm-m", "ppm"], exclude_patterns=["id", "_id", "location id", "emission id"]),
         'emission_rate': find(["emission rate", "emission_rate", "emissionrate", "rate", "tasa", "kg/h", "kg/hr"]),
         'wspd': find(["wind_speed", "wind speed", "wind_spd", "windspeed", "speed", "wspd", "velocidad", "wind speed (m/s)"]),
         'wdir': find(["wind_dir", "wind direction", "wind_direction", "winddirection", "direction", "wdir", "direccion"]),
@@ -460,13 +470,21 @@ if not all([lat_col, lon_col]):
     st.stop()
 
 if not ch4_col:
-    # Intentar usar cualquier columna numérica como concentración
-    numeric_cols = data.select_dtypes(include=[np.number]).columns
-    if len(numeric_cols) > 0:
-        ch4_col = numeric_cols[0]
-        st.warning(f"⚠️ Usando columna '{ch4_col}' como concentración de metano")
-    else:
-        st.error("❌ No se encontró columna de concentración de metano")
+    # Buscar específicamente columnas de concentración, excluyendo IDs
+    for col in data.columns:
+        col_lower = str(col).lower()
+        # Excluir explícitamente columnas de ID o identificadores
+        if any(x in col_lower for x in ['id', 'identifier', 'code', 'numero', 'number']):
+            continue
+        # Buscar columnas de concentración
+        if any(x in col_lower for x in ['concentration', 'concentracion', 'ppm', 'ch4', 'ch₄', 'methane', 'metano']):
+            ch4_col = col
+            break
+    
+    if not ch4_col:
+        st.error("❌ No se encontró columna de concentración de metano (Max Concentration)")
+        st.info("📋 Asegúrese de que el archivo tenga una columna llamada 'Max Concentration (ppm-m)' o similar")
+        st.info(f"📊 Columnas numéricas disponibles: {', '.join([str(c) for c in data.select_dtypes(include=[np.number]).columns])}")
         st.stop()
 
 # ══════════════════════════════════════════════════════════════════════
