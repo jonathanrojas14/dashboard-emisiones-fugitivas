@@ -266,7 +266,7 @@ st.markdown(f"""
 st.markdown("""
 <div style='text-align: center; padding: 1rem 0 2rem 0;'>
     <h1 style='margin: 0; padding: 0;'>
-        🛢️ Interpretación de Datos de Monitoreo Top-Down: Módulo de Análisis Exploratorio
+        🛢️ Interpretación de Datos de Monitoreo Top-Down
     </h1>
     <p style='color: #7F8C8D; font-size: 1.1rem; margin-top: 0.5rem;'>
         Sistema de Análisis y Visualización de Concentraciones de Metano
@@ -388,14 +388,14 @@ def auto_detect_columns(df):
     detected = {
         'lat': find(["latitude", "lat", "y"]),
         'lon': find(["longitude", "lon", "lng", "long", "x"]),
-        'ch4': find(["ch4", "methane", "metano", "ch_4", "concentration", "concentracion", "emission", "flux"]),
+        'ch4': find(["max concentration", "max_concentration", "concentration", "ch4", "methane", "metano", "ch_4", "concentracion", "ppm-m", "ppm"]),
         'emission_rate': find(["emission rate", "emission_rate", "emissionrate", "rate", "tasa", "kg/h", "kg/hr"]),
         'wspd': find(["wind_speed", "wind speed", "wind_spd", "windspeed", "speed", "wspd", "velocidad", "wind speed (m/s)"]),
         'wdir': find(["wind_dir", "wind direction", "wind_direction", "winddirection", "direction", "wdir", "direccion"]),
         'date': find(["date", "fecha", "time", "hora", "datetime", "timestamp", "survey"]),
         'time': find(["time", "hora", "hour"]),
         'scan_datetime': find(["scan date time", "scan_date_time", "scandatetime", "scan date", "scan time", "utc"]),
-        'location': find(["location", "id", "name", "emission location"]),
+        'location': find(["emission location id", "location id", "location_id", "emission_location_id"]),
         'facility': find(["facility name", "facility_name", "facility", "instalacion", "instalación"]),
         'presidencia': find(["presidencia", "presidency", "presidente"]),
         'regional': find(["regional", "region", "área", "area"]),
@@ -415,14 +415,16 @@ presidencia_col = cols['presidencia']
 regional_col = cols['regional']
 
 # Detectar unidades de CH4
-ch4_units = "ppm"
+ch4_units = "ppm-m"
 if ch4_col:
     col_name_lower = str(ch4_col).lower()
     if 'kg/h' in col_name_lower or 'kg/hr' in col_name_lower:
         ch4_units = "kg/h"
     elif 'g/s' in col_name_lower:
         ch4_units = "g/s"
-    elif 'ppm' in col_name_lower or 'concentration' in col_name_lower or 'flux' in col_name_lower:
+    elif 'ppm-m' in col_name_lower:
+        ch4_units = "ppm-m"
+    elif 'ppm' in col_name_lower or 'concentration' in col_name_lower:
         ch4_units = "ppm"
 
 # Detectar unidades de Emission Rate
