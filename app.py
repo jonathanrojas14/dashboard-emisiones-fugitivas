@@ -304,8 +304,10 @@ def find_data_sheet(xls):
     """
     Encuentra automáticamente la hoja con datos de emisiones
     Busca hojas prioritarias y detecta headers por palabras clave
+    PRIORIDAD: Extended tiene más datos que Summary (incluye Max Concentration)
     """
-    priority_sheets = ['Emission Location Summary', 'Emission Location Extended', 'Facility Summary']
+    # IMPORTANTE: Extended va primero porque tiene Max Concentration (ppm-m)
+    priority_sheets = ['Emission Location Extended', 'Emission Location Summary', 'Facility Summary']
     
     for sheet in priority_sheets:
         if sheet in xls.sheet_names:
@@ -320,11 +322,12 @@ def load_all_relevant_sheets(xls):
     """
     Carga todas las hojas relevantes del archivo Excel
     Prioriza hojas con datos de emisiones y viento
+    PRIORIDAD: Extended primero porque tiene Max Concentration (ppm-m)
     """
     sheets_data = {}
     
-    # Hojas prioritarias
-    priority_sheets = ['Emission Location Summary', 'Emission Location Extended']
+    # Hojas prioritarias - Extended primero para tener Max Concentration
+    priority_sheets = ['Emission Location Extended', 'Emission Location Summary']
     
     for sheet in priority_sheets:
         if sheet in xls.sheet_names:
